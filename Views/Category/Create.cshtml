@@ -1,0 +1,16 @@
+@model CategoryCreateVm;
+
+<h1>Create category</h1>
+
+<p>Here the admin will create a category</p>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Category.Name" class="control-label"></label>
+        <input asp-for="Category.Name" class="form-control" />
+        <span asp-validation-for="Category.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn-primary" />
+    </div>
+</form>

@@ -3,9 +3,11 @@
 @{
     var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
 }
-<h1>Ctagory</h1>
+<h1>Category</h1>
 
 <p>I will list all categories here</p>
+
+@Html.ActionLink("Create new category", "Create")
 
 @if(isAdmin)
 {
@@ -14,7 +16,6 @@
     </p>
 }
     
-
 <table class="table">
     <thead>
         <tr>
@@ -27,7 +28,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var category in Model.Category)
+        @foreach (var category in Model.Categories)
         {
             <tr>
                 <td>@category.Id</td>
@@ -40,9 +41,13 @@
                     }
                     else
                     {
-                        @category.Name
+                        <a asp-action="Edit" asp-route-id="@category.Id" title="@category.Name">
+                            @category.Name
+                        </a>
+                        //@category.Name
                     }
                 </td>
+                <td><a href="@Url.Action("Delete", "Category", new {id = category.Id})">Delete</a></td>
                 @if(isAdmin)
                 {
                     <td><a href="@Url.Action("Delete", "Category", new {id = category.Id})">Delete</a></td>
