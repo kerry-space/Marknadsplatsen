@@ -1,0 +1,65 @@
+@model UserIndexVm
+@inject UserService UserService
+@{
+    var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
+}
+<h1>Users</h1>
+
+@* @if (isAdmin)
+{
+<a asp-action="Create">Create new user</a>
+} *@
+
+
+@* <p>Here I will list all users</p> *@
+<a asp-action="Create">Create new user</a>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Number</th>
+            <th>Country</th>
+            <th></th>
+            @* <th>Number</th> *@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <td>
+                @* @if (isAdmin)
+            {
+            <a asp-action="Edit" asp-route-id="@user.Id">
+            @user.Name
+            </a>
+            }
+            else
+            {
+            @user.Name
+            } *@
+
+
+                <a asp-action="Edit" asp-route-id="@user.Id">
+                    @user.Name
+                </a>
+
+
+            </td>
+
+            <td>@user.Email</td>
+            <td>@user.PhoneNumber</td>
+            <td>@user.Country</td>
+
+            @* @if (isAdmin)
+        {
+        <td><a href="@Url.Action("Delete", "User", new { id = user.Id})">Delete</a></td>
+
+        } *@
+
+            <td><a href="@Url.Action("Delete", "User", new { id = user.Id})">Delete</a></td>
+        }
+    </tbody>
+</table>
