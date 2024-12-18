@@ -1,4 +1,5 @@
 using Marknadsplatsen.Models;
+using Marknadsplatsen.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,6 +15,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI();
+
+// builder.Services.AddTransient<DatabaseSetupService>();
+// builder.Services.AddTransient<UserService>();
 
 var app = builder.Build();
 
@@ -38,5 +42,12 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+
+//Initialize the database
+// using(var scope = app.Services.CreateScope())
+// {
+//     var DatabaseSetupService = scope.ServiceProvider.GetRequiredService<DatabaseSetupService>();
+//     await DatabaseSetupService.InitialAsync();
+// }
 
 app.Run();
