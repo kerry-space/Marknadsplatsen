@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Identity;
-
 namespace Marknadsplatsen.Services;
 
-/*
+
 public class DatabaseSetupService(
     RoleManager<IdentityRole> roleManager,
-    UserManager<IdentityRole> userManager)
+    UserManager<IdentityUser> userManager)
 {
     public async Task InitialAsync()
     {
@@ -30,8 +29,4 @@ public class DatabaseSetupService(
             await userManager.AddToRoleAsync(adminUser, "Administrator");
         }
     }
-}*/
-
-//dotnet aspnet-codegenerator identity -dc Marknadsplatsen.Models.ApplicationDbContext
-
-//dotnet ef migrations add x2
+}

@@ -2,7 +2,7 @@ using System.Security.Claims;
 using Marknadsplatsen.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace Lab01.Services;
+namespace Marknadsplatsen.Services;
 
 public class UserService(UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
 {

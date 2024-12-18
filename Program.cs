@@ -16,8 +16,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI();
 
-// builder.Services.AddTransient<DatabaseSetupService>();
-// builder.Services.AddTransient<UserService>();
+builder.Services.AddTransient<DatabaseSetupService>();
+builder.Services.AddTransient<UserService>();
 
 var app = builder.Build();
 
@@ -44,10 +44,10 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 //Initialize the database
-// using(var scope = app.Services.CreateScope())
-// {
-//     var DatabaseSetupService = scope.ServiceProvider.GetRequiredService<DatabaseSetupService>();
-//     await DatabaseSetupService.InitialAsync();
-// }
+using(var scope = app.Services.CreateScope())
+{
+    var DatabaseSetupService = scope.ServiceProvider.GetRequiredService<DatabaseSetupService>();
+    await DatabaseSetupService.InitialAsync();
+}
 
 app.Run();
