@@ -1,4 +1,3 @@
 obj/
 bin/
-lib/
-docker-compose.yml/
+docker-compose.yml
