@@ -15,4 +15,6 @@ public class CategoryController(ApplicationDbContext context) : Controller
         var vm = new CategoryIndexVm { Categories = categories };
         return View(vm);
     }
+
+    
 }
