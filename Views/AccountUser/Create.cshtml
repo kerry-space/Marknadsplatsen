@@ -1,0 +1,42 @@
+@model AccountUserCreateVm
+<h1>Create user</h1>
+<p>Here the admin will be able to create a new user</p>
+
+<form asp-action="Create">
+    <div class="form-group mt-3">
+        <label asp-for="AccountUser.Name" class="control-label"></label>
+        <input asp-for="AccountUser.Name" class="form-control" />
+        <span asp-validation-for="AccountUser.Name" class="text-danger"></span>
+    </div>
+    <div class="form-group mt-3">
+        <label asp-for="AccountUser.Email" class="control-label"></label>
+        <input asp-for="AccountUser.Email" class="form-control" />
+        <span asp-validation-for="AccountUser.Email" class="text-danger"></span>
+    </div>
+    <div class="form-group mt-3">
+        <label asp-for="AccountUser.PhoneNumber" class="control-label"></label>
+        <input asp-for="AccountUser.PhoneNumber" class="form-control" />
+        <span asp-validation-for="AccountUser.PhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group mt-3">
+        <label asp-for="AccountUser.Country" class="control-label"></label>
+        <input asp-for="AccountUser.Country" class="form-control" />
+        <span asp-validation-for="AccountUser.Country" class="text-danger"></span>
+    </div>
+
+    @* <div class="form-group">
+    <label asp-for="User.Country" class="control-label"></label>
+    <input asp-for="User.Country" class="form-control" />
+    <span asp-validation-for="User.Country" class="text-danger"></span>
+    </div> *@
+
+    <div class="form-group mt-3">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>
+
+@* Name
+Email
+Phonenumber
+Country
+Listings? *@

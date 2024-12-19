@@ -6,21 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace Marknadsplatsen.Controllers;
 
-public class UserController(ApplicationDbContext context) : Controller
+public class AccountUserController(ApplicationDbContext context) : Controller
 {
     public async Task<IActionResult> Index()
     {
-        var users = await context.Users.ToListAsync();
+        var accountUsers = await context.AccountUsers.ToListAsync();
 
-        var vm = new UserIndexVm { Users = users };
+        var vm = new AccountUserIndexVm { AccountUser = accountUsers };
         return View(vm);
     }
 
     public IActionResult Create()
     {
-        var vm = new UserCreateVm
+        var vm = new AccountUserCreateVm
         {
-            User = new User()
+            AccountUser = new AccountUser()
         };
 
         return View(vm);
@@ -29,11 +29,11 @@ public class UserController(ApplicationDbContext context) : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     // [Authorize(Roles = RoleConstants.Administrator)]
-    public async Task<IActionResult> CreateAsync(UserCreateVm userVm)
+    public async Task<IActionResult> CreateAsync(AccountUserCreateVm userVm)
     {
         if (ModelState.IsValid)
         {
-            context.Add(userVm.User);
+            context.Add(userVm.AccountUser);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -47,16 +47,16 @@ public class UserController(ApplicationDbContext context) : Controller
             return NotFound();
         }
 
-        var user = await context.Users.FindAsync(id);
+        var user = await context.AccountUsers.FindAsync(id);
 
         if (user == null)
         {
             return NotFound();
         }
 
-        var vm = new UserEditVm
+        var vm = new AccountUserEditVm
         {
-            User = user
+            AccountUser = user
         };
         return View(vm);
     }
@@ -64,13 +64,13 @@ public class UserController(ApplicationDbContext context) : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     // [Authorize(Roles = RoleConstants.Administrator)]
-    public async Task<IActionResult> Edit(UserEditVm userVm)
+    public async Task<IActionResult> Edit(AccountUserEditVm userVm)
     {
-        var user = userVm.User;
+        var user = userVm.AccountUser;
 
         if (ModelState.IsValid)
         {
-            if (!UserExists(user.Id))
+            if (!AccountUserExists(user.Id))
             {
                 return NotFound();
             }
@@ -91,16 +91,16 @@ public class UserController(ApplicationDbContext context) : Controller
             return NotFound();
         }
 
-        var user = await context.Users
+        var user = await context.AccountUsers
             .FirstOrDefaultAsync(m => m.Id == id);
         if (user == null)
         {
             return NotFound();
         }
 
-        var vm = new UserDeleteVm
+        var vm = new AccountUserDeleteVm
         {
-            User = user
+            AccountUser = user
         };
 
         return View(vm);
@@ -111,20 +111,20 @@ public class UserController(ApplicationDbContext context) : Controller
     // [Authorize(Roles = RoleConstants.Administrator)]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var user = await context.Users.FindAsync(id);
+        var user = await context.AccountUsers.FindAsync(id);
         if (user == null)
         {
             return NotFound();
         }
-        context.Users.Remove(user);
+        context.AccountUsers.Remove(user);
         await context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
 
-    private bool UserExists(int id)
+    private bool AccountUserExists(int id)
     {
-        return context.Users.Any(user => user.Id == id);
+        return context.AccountUsers.Any(user => user.Id == id);
     }
 
 }

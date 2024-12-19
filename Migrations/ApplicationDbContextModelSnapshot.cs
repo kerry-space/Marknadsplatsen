@@ -22,6 +22,34 @@ namespace Marknadsplatsen.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Marknadsplatsen.Models.AccountUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PhoneNumber")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AccountUsers");
+                });
+
             modelBuilder.Entity("Marknadsplatsen.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -47,6 +75,9 @@ namespace Marknadsplatsen.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AccountUserId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -58,42 +89,11 @@ namespace Marknadsplatsen.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AccountUserId");
 
                     b.ToTable("Listings");
-                });
-
-            modelBuilder.Entity("Marknadsplatsen.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -298,9 +298,9 @@ namespace Marknadsplatsen.Migrations
 
             modelBuilder.Entity("Marknadsplatsen.Models.Listing", b =>
                 {
-                    b.HasOne("Marknadsplatsen.Models.User", null)
+                    b.HasOne("Marknadsplatsen.Models.AccountUser", null)
                         .WithMany("Listings")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("AccountUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -354,7 +354,7 @@ namespace Marknadsplatsen.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Marknadsplatsen.Models.User", b =>
+            modelBuilder.Entity("Marknadsplatsen.Models.AccountUser", b =>
                 {
                     b.Navigation("Listings");
                 });

@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject UserService UserService
+@{
+    var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -24,16 +32,37 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">User</a>
-                        </li>
+                        @if (isAdmin)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="AccountUser"
+                                    asp-action="Index">User</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
+
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <div class="navbar-nav d-sm-inline-flex justify-content-end">
+                    <li class="nav-item">
+                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
+                            asp-route-returnUrl="/Identity/Account/Login" method="post">
+                            <button class="nav-link btn btn-link text-dark" type="submit">Logout</button>
+                        </form>
+                    </li>
+                </div>
+            }
+            else
+            {
+                <div class="navbar-nav d-sm-inline-flex justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                    </li>
+                </div>
+            }
+
         </nav>
     </header>
     <div class="container">

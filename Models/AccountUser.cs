@@ -4,7 +4,7 @@ using Microsoft.Net.Http.Headers;
 namespace Marknadsplatsen.Models;
 
 
-public class User
+public class AccountUser
 {
     public int Id {get; set;}
 
