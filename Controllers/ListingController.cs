@@ -7,7 +7,7 @@ namespace Marknadsplatsen.Controllers;
 
 public class ListingController(ApplicationDbContext context) : Controller
 {
-    
+
 
     // GET: Listings
     public async Task<IActionResult> Index()
@@ -20,7 +20,11 @@ public class ListingController(ApplicationDbContext context) : Controller
     // GET: Listings/Create
     public IActionResult Create()
     {
-        return View();
+        var vm = new ListingCreateVm
+        {
+            Listing = new Listing()
+        };
+        return View(vm);
     }
 
     // POST: Listings/Create
@@ -84,13 +88,18 @@ public class ListingController(ApplicationDbContext context) : Controller
     // GET: Listings/Delete/5
     public async Task<IActionResult> Delete(int id)
     {
-        var listing = await context.Listings.FindAsync(id);
+        var listing = await context.Listings.FirstOrDefaultAsync(l => l.Id == id);
         if (listing == null)
         {
             return NotFound();
         }
 
-        return View(listing);
+        var vm = new ListingDeleteVm
+        {
+            Listing = listing
+        };
+
+        return View(vm);
     }
 
     // POST: Listings/Delete/5
@@ -99,11 +108,12 @@ public class ListingController(ApplicationDbContext context) : Controller
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var listing = await context.Listings.FindAsync(id);
-        if (listing != null)
+        if (listing == null)
         {
-            context.Listings.Remove(listing);
-            await context.SaveChangesAsync();
+            return NotFound();
         }
+        context.Listings.Remove(listing);
+        await context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
