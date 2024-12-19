@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Marknadsplatsen.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241218142710_x3")]
-    partial class x3
+    [Migration("20241219094534_x1")]
+    partial class x1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,34 @@ namespace Marknadsplatsen.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Marknadsplatsen.Models.AccountUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PhoneNumber")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AccountUsers");
+                });
 
             modelBuilder.Entity("Marknadsplatsen.Models.Category", b =>
                 {
@@ -50,6 +78,9 @@ namespace Marknadsplatsen.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AccountUserId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -61,42 +92,11 @@ namespace Marknadsplatsen.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AccountUserId");
 
                     b.ToTable("Listings");
-                });
-
-            modelBuilder.Entity("Marknadsplatsen.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -301,9 +301,9 @@ namespace Marknadsplatsen.Migrations
 
             modelBuilder.Entity("Marknadsplatsen.Models.Listing", b =>
                 {
-                    b.HasOne("Marknadsplatsen.Models.User", null)
+                    b.HasOne("Marknadsplatsen.Models.AccountUser", null)
                         .WithMany("Listings")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("AccountUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -357,7 +357,7 @@ namespace Marknadsplatsen.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Marknadsplatsen.Models.User", b =>
+            modelBuilder.Entity("Marknadsplatsen.Models.AccountUser", b =>
                 {
                     b.Navigation("Listings");
                 });
