@@ -1,0 +1,96 @@
+@model CategoryIndexVm;
+@inject UserService UserService
+@{
+    var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
+}
+<h1>Category</h1>
+
+<p>I will list all categories here</p>
+
+@Html.ActionLink("Create new category", "Create")
+
+@if(isAdmin)
+{
+    <p>
+        @Html.ActionLink("Create new category", "Create")
+    </p>
+}
+
+<div class="card-group">
+    @foreach (var category in Model.Categories)
+        {
+            <div class="card">
+                @*<img class="card-img-top" src="..." alt="Card image cap">*@
+                <div class="card-body">
+                    <p class="card-title">
+                        @if(isAdmin)
+                    {
+                        <a asp-action="Edit" asp-route-id="@category.Id" title="@category.Name">
+                            @category.Name
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="Edit" asp-route-id="@category.Id" title="@category.Name">
+                            @category.Name
+                        </a>
+                        //@category.Name
+                    }  
+                    <div>
+                        <a href="@Url.Action("Delete", "Category", new {id = category.Id})">Delete</a>
+                    @if(isAdmin)
+                    {
+                        <a href="@Url.Action("Delete", "Category", new {id = category.Id})">Delete</a>
+                    }  
+
+                    </div>                  
+                        
+                    </p>
+                </div>
+            </div>
+        }
+</div>
+
+@*
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            @if(isAdmin)
+            {
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model.Categories)
+        {
+            
+            <tr>
+                <td>@category.Id</td>
+                <td>
+                    @if(isAdmin)
+                    {
+                        <a asp-action="Edit" asp-route-id="@category.Id" title="@category.Name">
+                            @category.Name
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="Edit" asp-route-id="@category.Id" title="@category.Name">
+                            @category.Name
+                        </a>
+                        //@category.Name
+                    }
+                </td>
+                <td><a href="@Url.Action("Delete", "Category", new {id = category.Id})">Delete</a></td>
+                @if(isAdmin)
+                {
+                    <td><a href="@Url.Action("Delete", "Category", new {id = category.Id})">Delete</a></td>
+                }                
+            </tr>
+        }
+    </tbody>
+</table>
+*@

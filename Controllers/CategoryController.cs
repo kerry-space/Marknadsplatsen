@@ -15,4 +15,105 @@ public class CategoryController(ApplicationDbContext context) : Controller
         var vm = new CategoryIndexVm { Categories = categories };
         return View(vm);
     }
+
+    public IActionResult Create()
+    {
+        var vm = new CategoryCreateVm 
+        { 
+            Category = new Category()
+        };
+
+        return View(vm);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    //[Authorize(Roles = RoleConstants.Administrator)]
+    public async Task<IActionResult> CreateAsync(CategoryCreateVm categoryVm)
+    {
+        context.Add(categoryVm.Category);
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    //[Authorize(Roles = RoleConstants.Administrator)]
+    public async Task<IActionResult> EditAsync(int? id)
+    {
+        if(id==null)
+        {
+            return NotFound();
+        }
+        var category = await context.Categories.FindAsync(id);
+        if(category==null)
+        {
+            return NotFound();
+        }
+        var vm = new CategoryEditVm
+        {
+            Category = category
+        };
+
+        return View(vm);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    //[Authorize(Roles = RoleConstants.Administrator)]
+    public async Task<IActionResult> Edit(CategoryEditVm categoryVm)
+    {
+        var category = categoryVm.Category;
+        
+        if(ModelState.IsValid)
+        {
+            if(!CategoryExists(category.Id))
+            {
+                return NotFound();
+            }
+            context.Update(category);
+            await context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        return View(categoryVm);
+    }
+
+    //[Authorize(Roles = RoleConstants.Administrator)]
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if(id == null)
+        {
+            return NotFound();
+        }
+        var category = await context.Categories.FirstOrDefaultAsync(m => m.Id == id);
+        if(category == null)
+        {
+            return NotFound();
+        }
+        var vm = new CategoryDeleteVm
+        {
+            Category = category
+        };
+
+        return View(vm);
+    }
+
+    
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    //[Authorize(Roles = RoleConstants.Administrator)]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var category = await context.Categories.FindAsync(id);
+        if(category == null)
+        {
+            return NotFound();
+        }
+        context.Categories.Remove(category);
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    private bool CategoryExists(int id)
+    {
+        return context.Categories.Any(e => e.Id == id);
+    }
 }
