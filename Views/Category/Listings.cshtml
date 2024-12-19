@@ -1,0 +1,10 @@
+@model Category
+
+@Model.Name
+
+@foreach (var prod in Model.Listings)
+{
+    <p>
+        @prod.Title
+    </p>
+}

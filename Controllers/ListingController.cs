@@ -17,6 +17,14 @@ public class ListingController(ApplicationDbContext context) : Controller
         return View(vm);
     }
 
+    // GET: Listings
+    public async Task<IActionResult> FilterById(int? id)
+    {
+        var listings = await context.Listings.ToListAsync();
+        var vm = new ListingIndexVm { Listings = listings };
+        return View(vm);
+    }
+
     // GET: Listings/Create
     public IActionResult Create()
     {

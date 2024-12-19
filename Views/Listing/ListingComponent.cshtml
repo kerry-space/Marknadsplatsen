@@ -1,0 +1,12 @@
+@model ListingComponentsVm
+
+
+@foreach (var cat in Model.Categories)
+{
+    @foreach (var list in cat.Listings)
+    {
+        <p>
+            @list.Title
+        </p>
+    }
+}

@@ -10,7 +10,7 @@ public class AccountUserController(ApplicationDbContext context) : Controller
 {
     public async Task<IActionResult> Index()
     {
-        var accountUsers = await context.AccountUsers.ToListAsync();
+        var accountUsers = await context.AccountUsers.Include(c => c.Listings).ToListAsync();
 
         var vm = new AccountUserIndexVm { AccountUser = accountUsers };
         return View(vm);

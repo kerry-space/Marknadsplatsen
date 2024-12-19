@@ -7,8 +7,6 @@
 
 <p>I will list all categories here</p>
 
-@Html.ActionLink("Create new category", "Create")
-
 @if (isAdmin)
 {
     <p>
@@ -23,24 +21,15 @@
             @*<img class="card-img-top" src="..." alt="Card image cap">*@
             <div class="card-body">
                 <p class="card-title">
-                    @if (isAdmin)
-                    {
-                        <a asp-action="Edit" asp-route-id="@category.Id" title="@category.Name">
-                            @category.Name
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-action="Edit" asp-route-id="@category.Id" title="@category.Name">
-                            @category.Name
-                        </a>
-                        //@category.Name
-                    }
+                    <a asp-action="Listings" asp-route-id="@category.Id">@category.Name</a>
+                    @* Klicka på kategorin -> en lista av produkter i den kategorin *@
+                    @* @category.Name *@
+
                 <div>
-                    <a href="@Url.Action("Delete", "Category", new {id = category.Id})">Delete</a>
                         @if (isAdmin)
                         {
                         <a href="@Url.Action("Delete", "Category", new {id = category.Id})">Delete</a>
+                        <a href="@Url.Action("Edit", "Category", new {id = category.Id})">Edit</a>
                         }
 
                 </div>

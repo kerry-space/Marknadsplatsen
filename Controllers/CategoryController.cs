@@ -16,10 +16,24 @@ public class CategoryController(ApplicationDbContext context) : Controller
         return View(vm);
     }
 
+    // Show listings for a specific category
+    public async Task<IActionResult> Listings(int id)
+    {
+        var category = await context.Categories.Include(c => c.Listings)
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+        if (category == null)
+        {
+            return NotFound();
+        }
+
+        return View(category);
+    }
+
     public IActionResult Create()
     {
-        var vm = new CategoryCreateVm 
-        { 
+        var vm = new CategoryCreateVm
+        {
             Category = new Category()
         };
 
@@ -39,12 +53,12 @@ public class CategoryController(ApplicationDbContext context) : Controller
     //[Authorize(Roles = RoleConstants.Administrator)]
     public async Task<IActionResult> EditAsync(int? id)
     {
-        if(id==null)
+        if (id == null)
         {
             return NotFound();
         }
         var category = await context.Categories.FindAsync(id);
-        if(category==null)
+        if (category == null)
         {
             return NotFound();
         }
@@ -62,10 +76,10 @@ public class CategoryController(ApplicationDbContext context) : Controller
     public async Task<IActionResult> Edit(CategoryEditVm categoryVm)
     {
         var category = categoryVm.Category;
-        
-        if(ModelState.IsValid)
+
+        if (ModelState.IsValid)
         {
-            if(!CategoryExists(category.Id))
+            if (!CategoryExists(category.Id))
             {
                 return NotFound();
             }
@@ -79,12 +93,12 @@ public class CategoryController(ApplicationDbContext context) : Controller
     //[Authorize(Roles = RoleConstants.Administrator)]
     public async Task<IActionResult> Delete(int? id)
     {
-        if(id == null)
+        if (id == null)
         {
             return NotFound();
         }
         var category = await context.Categories.FirstOrDefaultAsync(m => m.Id == id);
-        if(category == null)
+        if (category == null)
         {
             return NotFound();
         }
@@ -96,14 +110,14 @@ public class CategoryController(ApplicationDbContext context) : Controller
         return View(vm);
     }
 
-    
+
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     //[Authorize(Roles = RoleConstants.Administrator)]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var category = await context.Categories.FindAsync(id);
-        if(category == null)
+        if (category == null)
         {
             return NotFound();
         }
