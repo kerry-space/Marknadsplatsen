@@ -49,48 +49,46 @@ public class ListingController(ApplicationDbContext context) : Controller
         return View(listing);
     }
 
-    // GET: Listings/Edit/5
-    public async Task<IActionResult> Edit(int id)
+    public async Task<IActionResult> EditAsync(int? id)
     {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
         var listing = await context.Listings.FindAsync(id);
+
         if (listing == null)
         {
             return NotFound();
         }
-        return View(listing);
+
+        var vm = new ListingEditVm
+        {
+            Listing = listing
+        };
+        return View(vm);
     }
 
-    // POST: Listings/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, Listing listing)
+    // [Authorize(Roles = RoleConstants.Administrator)]
+    public async Task<IActionResult> Edit(ListingEditVm listingVm)
     {
-        if (id != listing.Id)
-        {
-            return NotFound();
-        }
+        var listing = listingVm.Listing;
 
         if (ModelState.IsValid)
         {
-            try
+            if (!CategoryExists(listing.Id))
             {
-                context.Update(listing);
-                await context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ListingExists(listing.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+
+            context.Update(listing);
+            await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(listing);
+        return View(listingVm);
     }
 
     // GET: Listings/Delete/5
@@ -126,7 +124,14 @@ public class ListingController(ApplicationDbContext context) : Controller
     }
 
     private bool ListingExists(int id)
+
+    {
+        return context.Listings.Any(e => e.Id == id);
+    }
+
+    private bool CategoryExists(int id)
     {
         return context.Listings.Any(e => e.Id == id);
     }
 }
+
