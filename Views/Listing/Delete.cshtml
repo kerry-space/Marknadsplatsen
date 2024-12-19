@@ -1,0 +1,23 @@
+@model Marknadsplatsen.Models.Listing
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Delete Listing</h1>
+
+    <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+        <div class="card-body">
+            <p>Are you sure you want to delete this listing?</p>
+            <div class="mb-3">
+                <strong>Title:</strong> @Model.Title <br />
+                <strong>Description:</strong> @Model.Description <br />
+                <strong>Price:</strong> @Model.Price SEK
+            </div>
+            <form asp-action="DeleteConfirmed" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="text-center">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
