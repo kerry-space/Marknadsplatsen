@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Marknadsplatsen.Models;
@@ -5,12 +6,16 @@ using Marknadsplatsen.ViewModels;
 
 namespace Marknadsplatsen.Controllers;
 
-public class ListingController(ApplicationDbContext context) : Controller
+public class ListingController(ApplicationDbContext context, UserManager<IdentityUser> userManager) : Controller
 {
     // GET: Listings
     public async Task<IActionResult> Index()
     {
-        var listings = await context.Listings.ToListAsync();
+        var currentUserId = userManager.GetUserId(User);
+        var listings = await context.Listings
+            .Where(l => l.OwnerId == currentUserId || User.IsInRole("Administrator"))
+            .ToListAsync();
+
         var vm = new ListingIndexVm { Listings = listings };
         return View(vm);
     }
@@ -40,69 +45,99 @@ public class ListingController(ApplicationDbContext context) : Controller
         return View(vm);
     }
 
-    // POST: Listings/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateAsync(ListingCreateVm listingVm)
     {
+
+        var currentUser = await userManager.GetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Unauthorized();
+        }
+        listingVm.Listing.OwnerId = currentUser.Id;
+
         if (ModelState.IsValid)
         {
             context.Add(listingVm.Listing);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        listingVm.Categories = context.Categories.ToList();
+
         return View(listingVm);
     }
 
-    public async Task<IActionResult> EditAsync(int? id)
+
+    public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var listing = await context.Listings.FindAsync(id);
+        var listing = await context.Listings.Include(l => l.Category)
+            .FirstOrDefaultAsync(l => l.Id == id);
+
 
         if (listing == null)
         {
             return NotFound();
         }
+        var categories = await context.Categories.ToListAsync();
+        var currentUser = await userManager.GetUserAsync(User);
+        listing.OwnerId = currentUser?.Id;
 
         var vm = new ListingEditVm
         {
-            Listing = listing
+            Listing = listing,
+            Categories = categories
         };
+
         return View(vm);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     // [Authorize(Roles = RoleConstants.Administrator)]
-    public async Task<IActionResult> Edit(ListingEditVm listingVm)
+    public async Task<IActionResult> EditAsync(ListingEditVm listingVm)
     {
-        var listing = listingVm.Listing;
-
         if (ModelState.IsValid)
         {
-            if (!CategoryExists(listing.Id))
+            var listing = listingVm.Listing;
+
+            var currentUser = await userManager.GetUserAsync(User);
+            listing.OwnerId = currentUser?.Id;
+
+            if (listing.CategoryId != null)
             {
-                return NotFound();
+                var category = await context.Categories.FindAsync(listing.CategoryId);
+                if (category == null)
+                {
+                    ModelState.AddModelError("Listing.CategoryId", "The selected category is invalid.");
+                    listingVm.Categories = await context.Categories.ToListAsync();
+                    return View(listingVm);
+                }
             }
+            context.Attach(listing).State = EntityState.Modified;
 
             context.Update(listing);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        listingVm.Categories = await context.Categories.ToListAsync();
         return View(listingVm);
     }
 
-    // GET: Listings/Delete/5
+
+
     public async Task<IActionResult> Delete(int id)
     {
         var listing = await context.Listings.FirstOrDefaultAsync(l => l.Id == id);
-        if (listing == null)
+        if (listing == null || listing.OwnerId != userManager.GetUserId(User))
         {
-            return NotFound();
+            return Forbid();
         }
 
         var vm = new ListingDeleteVm
@@ -113,7 +148,6 @@ public class ListingController(ApplicationDbContext context) : Controller
         return View(vm);
     }
 
-    // POST: Listings/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
@@ -129,7 +163,6 @@ public class ListingController(ApplicationDbContext context) : Controller
     }
 
     private bool ListingExists(int id)
-
     {
         return context.Listings.Any(e => e.Id == id);
     }

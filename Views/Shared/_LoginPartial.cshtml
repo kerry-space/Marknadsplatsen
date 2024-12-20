@@ -1,8 +1,8 @@
 @using Microsoft.AspNetCore.Identity
 @using Marknadsplatsen.Models
 
-@inject SignInManager<AccountUser> SignInManager
-@inject UserManager<AccountUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Marknadsplatsen.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241219140539_x2")]
-    partial class x2
+    [Migration("20241220134802_x1")]
+    partial class x1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,34 +24,6 @@ namespace Marknadsplatsen.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Marknadsplatsen.Models.AccountUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AccountUsers");
-                });
 
             modelBuilder.Entity("Marknadsplatsen.Models.Category", b =>
                 {
@@ -78,13 +50,14 @@ namespace Marknadsplatsen.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AccountUserId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("CategoryId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -97,9 +70,9 @@ namespace Marknadsplatsen.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountUserId");
-
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Listings");
                 });
@@ -306,13 +279,19 @@ namespace Marknadsplatsen.Migrations
 
             modelBuilder.Entity("Marknadsplatsen.Models.Listing", b =>
                 {
-                    b.HasOne("Marknadsplatsen.Models.AccountUser", null)
-                        .WithMany("Listings")
-                        .HasForeignKey("AccountUserId");
-
-                    b.HasOne("Marknadsplatsen.Models.Category", null)
+                    b.HasOne("Marknadsplatsen.Models.Category", "Category")
                         .WithMany("Listings")
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -364,11 +343,6 @@ namespace Marknadsplatsen.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Marknadsplatsen.Models.AccountUser", b =>
-                {
-                    b.Navigation("Listings");
                 });
 
             modelBuilder.Entity("Marknadsplatsen.Models.Category", b =>

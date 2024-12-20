@@ -3,9 +3,10 @@
 @{
     var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
 }
+@* Lägg till så att admin kan se vilka users har vilka listings *@
 
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Listings</h1>
+    <h1 class="text-center mb-4">@Model.Listings.FirstOrDefault()?.Category?.Name</h1>
     <div class="row">
         @foreach (var listing in Model.Listings)
         {

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace Marknadsplatsen.Models;
 
@@ -22,4 +23,8 @@ public class Listing
 
     //Navigera properties 
     public Category? Category { get; set; }
+
+    public string? OwnerId { get; set; } // Koppling till AspNetUser
+
+    public IdentityUser? Owner { get; set; }
 }

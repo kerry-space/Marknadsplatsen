@@ -1,4 +1,7 @@
+@using Microsoft.AspNetCore.Identity
 @model ListingIndexVm
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @inject UserService UserService
 @{
     var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
@@ -15,7 +18,7 @@
                         <h5 class="card-title">@listing.Title</h5>
                         <p class="card-text">@listing.Description</p>
                         <p class="card-text"><strong>Price:</strong> @listing.Price SEK</p>
-                        @if (isAdmin)
+                        @if (listing.OwnerId == UserManager.GetUserId(User) || isAdmin)
                         {
                             <div class="d-flex justify-content-between">
                                 <a asp-action="Edit" asp-route-id="@listing.Id" class="btn btn-warning btn-sm">Edit</a>
@@ -27,7 +30,7 @@
             </div>
         }
     </div>
-    @if (isAdmin)
+    @if (SignInManager.IsSignedIn(User))
     {
         <div class="text-center mt-4">
             <a asp-action="Create" class="btn btn-primary">Create New Listing</a>

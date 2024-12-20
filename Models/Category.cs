@@ -7,7 +7,7 @@ public class Category
 
     [Required(ErrorMessage = "Please enter a valid category name")]
     [Display(Name = "Category name:")]
-    public string Name { get; set; } = "";
+    public string? Name { get; set; } = "";
 
     public List<Listing> Listings { get; set; } = [];
 }

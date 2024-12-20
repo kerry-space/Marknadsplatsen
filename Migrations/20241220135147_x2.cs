@@ -5,7 +5,7 @@
 namespace Marknadsplatsen.Migrations
 {
     /// <inheritdoc />
-    public partial class x3 : Migration
+    public partial class x2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
