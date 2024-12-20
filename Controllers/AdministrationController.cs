@@ -21,14 +21,17 @@ public class AdministrationController(ApplicationDbContext context, UserManager<
     // GET: Administration/EditUser/5
     public async Task<IActionResult> EditUser(string id)
     {
-        // Retrieve the user using the ID
+        if (id == null)
+        {
+            return NotFound();
+        }
+
         var user = await userManager.FindByIdAsync(id);
         if (user == null)
         {
             return NotFound();
         }
 
-        // Create a ViewModel for editing the user
         var vm = new AdministrationEditUserVm
         {
             UserId = user.Id,
@@ -44,27 +47,27 @@ public class AdministrationController(ApplicationDbContext context, UserManager<
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditUser(AdministrationEditUserVm vm)
     {
+
         if (ModelState.IsValid)
         {
-            // Find the user to edit
             var user = await userManager.FindByIdAsync(vm.UserId);
             if (user == null)
             {
                 return NotFound();
             }
 
-            // Update the user properties
+            // Update user information
             user.UserName = vm.UserName;
             user.Email = vm.Email;
 
-            // Save the changes
+            // Save changes to user
             var result = await userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
-                return RedirectToAction(nameof(Index)); // Redirect back to the user list after successful update
+                return RedirectToAction(nameof(Index)); // Redirect to user list after update
             }
 
-            // Handle any errors during the update process
+            // Handle errors during the update process
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
@@ -74,53 +77,40 @@ public class AdministrationController(ApplicationDbContext context, UserManager<
         return View(vm);
     }
 
-    // GET: Administration/DeleteUser/5
     public async Task<IActionResult> DeleteUser(string id)
     {
-        // Retrieve the user based on the ID
+        if (id == null)
+        {
+            return NotFound();
+        }
+
         var user = await userManager.FindByIdAsync(id);
         if (user == null)
         {
             return NotFound();
         }
 
-        // Create a ViewModel for the delete confirmation
         var vm = new AdministrationDeleteUserVm
         {
             UserId = user.Id,
             UserName = user.UserName,
-            Email = user.Email
+            Email = user.Email,
         };
-
         return View(vm);
     }
 
-    // POST: Administration/DeleteUser/5
-    [HttpPost, ActionName("DeleteUser")]
+    [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteUserConfirmed(string id)
+    public async Task<IActionResult> DeleteUserConfirmed(AdministrationDeleteUserVm vm)
     {
-        // Retrieve the user based on the ID
-        var user = await userManager.FindByIdAsync(id);
+        var user = await userManager.FindByIdAsync(vm.UserId);
         if (user == null)
         {
             return NotFound();
         }
-
-        // Delete the user
-        var result = await userManager.DeleteAsync(user);
-        if (result.Succeeded)
-        {
-            return RedirectToAction(nameof(Index)); // Redirect back to the user list after successful deletion
-        }
-
-        // Handle any errors during the deletion process
-        foreach (var error in result.Errors)
-        {
-            ModelState.AddModelError(string.Empty, error.Description);
-        }
-
-        return View(); // Return the view if there was an error
+        context.Users.Remove(user);
+        await context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
     }
 }
 
