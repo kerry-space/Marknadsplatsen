@@ -9,5 +9,5 @@ public class Category
     [Display(Name = "Category name:")]
     public string Name { get; set; } = "";
 
-    public List<Listing>? Listings { get; set; } = [];
+    public List<Listing> Listings { get; set; } = [];
 }

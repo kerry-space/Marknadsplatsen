@@ -21,9 +21,8 @@
             @*<img class="card-img-top" src="..." alt="Card image cap">*@
             <div class="card-body">
                 <p class="card-title">
-                    <a asp-action="Listings" asp-route-id="@category.Id">@category.Name</a>
+                    <a asp-controller="Category" asp-action="Listings" asp-route-id="@category.Id">@category.Name</a>
                     @* Klicka på kategorin -> en lista av produkter i den kategorin *@
-                    @* @category.Name *@
 
                 <div>
                         @if (isAdmin)

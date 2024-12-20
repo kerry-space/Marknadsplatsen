@@ -1,4 +1,8 @@
-@model Category
+@model ListingIndexVm
+@inject UserService UserService
+@{
+    var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
+}
 
 <div class="container mt-5">
     <h1 class="text-center mb-4">Listings</h1>
@@ -11,16 +15,23 @@
                         <h5 class="card-title">@listing.Title</h5>
                         <p class="card-text">@listing.Description</p>
                         <p class="card-text"><strong>Price:</strong> @listing.Price SEK</p>
-                        <div class="d-flex justify-content-between">
-                            <a asp-controller="Listing" asp-action="Edit" asp-route-id="@listing.Id" class="btn btn-warning btn-sm">Edit</a>
-                            <a asp-controller="Listing" asp-action="Delete" asp-route-id="@listing.Id" class="btn btn-danger btn-sm">Delete</a>
-                        </div>
+
+                        @if (isAdmin)
+                        {
+                            <div class="d-flex justify-content-between">
+                                <a asp-controller="Listing" asp-action="Edit" asp-route-id="@listing.Id"
+                                    class="btn btn-warning btn-sm">Edit</a>
+                                <a asp-controller="Listing" asp-action="Delete" asp-route-id="@listing.Id"
+                                    class="btn btn-danger btn-sm">Delete</a>
+                            </div>
+                        }
+
                     </div>
                 </div>
             </div>
         }
     </div>
-    <div class="text-center mt-4">
-        <a asp-action="Create" class="btn btn-primary">Create New Listing</a>
-    </div>
+    @*<div class="text-center mt-4">
+    <a asp-controller="Listing" asp-action="Create" class="btn btn-primary">Create New Listing</a>
+    </div>*@
 </div>

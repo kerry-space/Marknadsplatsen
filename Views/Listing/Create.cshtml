@@ -1,5 +1,6 @@
 @model ListingCreateVm
 
+
 <div class="container mt-5">
     <h1 class="text-center mb-4">Create Listing</h1>
 
@@ -21,7 +22,16 @@
                     <input asp-for="Listing.Price" type="number" class="form-control" />
                     <span asp-validation-for="Listing.Price" class="text-danger"></span>
                 </div>
-                <div class="text-center">
+
+                <select asp-for="Listing.CategoryId" class="form-control">
+                    <option value="">Select a Category...</option>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <option value="@cat.Id">@cat.Name</option>
+                    }
+                </select>
+
+                <div class="text-center mt-3">
                     <button type="submit" class="btn btn-primary">Save</button>
                     <a asp-action="Index" class="btn btn-secondary">Cancel</a>
                 </div>

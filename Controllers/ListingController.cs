@@ -7,8 +7,6 @@ namespace Marknadsplatsen.Controllers;
 
 public class ListingController(ApplicationDbContext context) : Controller
 {
-
-
     // GET: Listings
     public async Task<IActionResult> Index()
     {
@@ -28,9 +26,16 @@ public class ListingController(ApplicationDbContext context) : Controller
     // GET: Listings/Create
     public IActionResult Create()
     {
+        var categories = context.Categories.ToList();
+        if (categories == null)
+        {
+            return NotFound();
+        }
+
         var vm = new ListingCreateVm
         {
-            Listing = new Listing()
+            Listing = new Listing(),
+            Categories = categories
         };
         return View(vm);
     }
@@ -38,15 +43,15 @@ public class ListingController(ApplicationDbContext context) : Controller
     // POST: Listings/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Listing listing)
+    public async Task<IActionResult> CreateAsync(ListingCreateVm listingVm)
     {
         if (ModelState.IsValid)
         {
-            context.Add(listing);
+            context.Add(listingVm.Listing);
             await context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(listing);
+        return View(listingVm);
     }
 
     public async Task<IActionResult> EditAsync(int? id)

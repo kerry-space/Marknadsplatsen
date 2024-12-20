@@ -19,15 +19,18 @@ public class CategoryController(ApplicationDbContext context) : Controller
     // Show listings for a specific category
     public async Task<IActionResult> Listings(int id)
     {
-        var category = await context.Categories.Include(c => c.Listings)
-            .FirstOrDefaultAsync(c => c.Id == id);
+        var category = await context.Categories
+        .Include(c => c.Listings)
+        .FirstOrDefaultAsync(c => c.Id == id);
 
         if (category == null)
         {
             return NotFound();
         }
 
-        return View(category);
+        var vm = new ListingIndexVm { Listings  =  category.Listings};
+
+        return View(vm);
     }
 
     public IActionResult Create()
