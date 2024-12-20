@@ -28,7 +28,7 @@ public class CategoryController(ApplicationDbContext context) : Controller
             return NotFound();
         }
 
-        var vm = new ListingIndexVm { Listings  =  category.Listings};
+        var vm = new ListingIndexVm { Listings = category.Listings };
 
         return View(vm);
     }
@@ -119,11 +119,14 @@ public class CategoryController(ApplicationDbContext context) : Controller
     //[Authorize(Roles = RoleConstants.Administrator)]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
+
         var category = await context.Categories.FindAsync(id);
         if (category == null)
         {
             return NotFound();
         }
+        var listingsToRemove = context.Listings.Where(l => l.CategoryId == id).ToList();
+        context.Listings.RemoveRange(listingsToRemove);
         context.Categories.Remove(category);
         await context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));

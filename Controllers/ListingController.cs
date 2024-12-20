@@ -130,8 +130,6 @@ public class ListingController(ApplicationDbContext context, UserManager<Identit
         return View(listingVm);
     }
 
-
-
     public async Task<IActionResult> Delete(int id)
     {
         var listing = await context.Listings.FirstOrDefaultAsync(l => l.Id == id);
