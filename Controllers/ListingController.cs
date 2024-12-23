@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Marknadsplatsen.Models;
 using Marknadsplatsen.ViewModels;
 
+
 namespace Marknadsplatsen.Controllers;
 
 public class ListingController(ApplicationDbContext context, UserManager<IdentityUser> userManager) : Controller
@@ -132,8 +133,10 @@ public class ListingController(ApplicationDbContext context, UserManager<Identit
 
     public async Task<IActionResult> Delete(int id)
     {
+        var isAdmin = User.IsInRole(RoleConstants.Administrator);
+
         var listing = await context.Listings.FirstOrDefaultAsync(l => l.Id == id);
-        if (listing == null || listing.OwnerId != userManager.GetUserId(User))
+        if (listing == null || (listing.OwnerId != userManager.GetUserId(User) && !isAdmin))
         {
             return Forbid();
         }
