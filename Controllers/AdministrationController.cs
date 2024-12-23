@@ -112,5 +112,31 @@ public class AdministrationController(ApplicationDbContext context, UserManager<
         await context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
+
+    public async Task<IActionResult> UserListings(string userId)
+    {
+        if (string.IsNullOrEmpty(userId))
+        {
+            return NotFound();
+        }
+
+        var UserListings = await context.Listings
+            .Where(l => l.OwnerId == userId)
+            .Include(l => l.Category)
+            .ToListAsync();
+
+        if (UserListings == null)
+        {
+            return NotFound();
+        }
+
+        var vm = new UserListingVm
+        {
+            Listings = UserListings
+        };
+
+        return View(vm);
+    }
+
 }
 
