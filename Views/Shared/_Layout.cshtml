@@ -36,15 +36,19 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Category"
                                 asp-action="Index">Category</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Listing"
-                                asp-action="Index">Listing</a>
-                        </li>
+                        @if (SignInManager.IsSignedIn(User) && !isAdmin)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Listing"
+                                    asp-action="Index">Listing</a>
+                            </li>
+                        }
+
                         @if (isAdmin)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AccountUser"
-                                    asp-action="Index">User</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Administration"
+                                    asp-action="Index">User Administration</a>
                             </li>
                         }
 

@@ -3,7 +3,6 @@
 @{
     var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
 }
-@* Lägg till så att admin kan se vilka users har vilka listings *@
 
 <div class="container mt-5">
     <h1 class="text-center mb-4">@Model.Listings.FirstOrDefault()?.Category?.Name</h1>
@@ -26,13 +25,16 @@
                                     class="btn btn-danger btn-sm">Delete</a>
                             </div>
                         }
-
                     </div>
                 </div>
             </div>
         }
+
+        @if (Model.Listings.Count == 0)
+        {
+            <div class="alert alert-danger">
+                <strong>No Listings:</strong> This category doesn't have any listings.
+            </div>
+        }
     </div>
-    @*<div class="text-center mt-4">
-    <a asp-controller="Listing" asp-action="Create" class="btn btn-primary">Create New Listing</a>
-    </div>*@
 </div>

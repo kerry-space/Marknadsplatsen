@@ -1,0 +1,39 @@
+@model UserListingVm
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">User Listings</h1>
+</div>
+
+@if (Model.Listings.Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var listing in Model.Listings)
+            {
+                <tr>
+                    <td>@listing.Id</td>
+                    <td>@listing.Title</td>
+                    <td>@listing.Category?.Name</td>
+                    <td>
+                        <a asp-controller="Listing" asp-action="Delete" asp-route-id="@listing.Id"
+                            class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-danger">
+        <strong>No Listings:</strong> This user doesn't have any listings.
+    </div>
+}

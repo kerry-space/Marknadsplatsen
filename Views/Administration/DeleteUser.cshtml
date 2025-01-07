@@ -1,0 +1,22 @@
+@model AdministrationDeleteUserVm
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Card Component for Delete Confirmation -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white text-center">
+                    <h4>Confirm Deletion</h4>
+                </div>
+                <div class="card-body">
+                    <p class="text-center">Are you sure you want to delete the user <strong>@Model.UserName</strong>?</p>
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="UserId"/>
+                        <input type="submit" value="Delete" class="btn btn-danger"/>
+                        <a asp-action="Index" class="btn btn-secondary">Cancel</a>                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
