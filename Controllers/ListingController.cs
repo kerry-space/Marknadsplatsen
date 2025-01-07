@@ -101,7 +101,7 @@ public class ListingController(ApplicationDbContext context, UserManager<Identit
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    // [Authorize(Roles = RoleConstants.Administrator)]
+    //[Authorize(Roles = RoleConstants.Administrator)]
     public async Task<IActionResult> EditAsync(ListingEditVm listingVm)
     {
         if (ModelState.IsValid)
