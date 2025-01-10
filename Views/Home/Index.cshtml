@@ -1,14 +1,24 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@{
-    ViewData["Title"] = "Home Page";
+@* @{
+ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1>Välkommen till Marknadsplatsen</h1>
+<h1>Välkommen till Marknadsplatsen</h1>
 </div>
 
 <div class="d-flex justify-content-center">
-    <img src="/images/Cart-removebg-preview.png" alt="Descriptive Text">
+<img src="/images/Cart-removebg-preview.png" alt="Descriptive Text">
+</div>
+*@
+
+<div class="d-flex flex-column align-items-center justify-content-center text-center text-white bg-dark"
+    style="height: 100vh;">
+    <h1 class="display-3 fw-bold">Välkommen till Marknadsplatsen</h1>
+    <p class="lead">Hitta det du söker, oavsett om det är nytt eller begagnat, till bästa möjliga pris.</p>
+    <div>
+        <a class="btn btn-primary btn-lg me-2" asp-controller="Category" asp-action="Index">Start Shopping</a>
+    </div>
 </div>
