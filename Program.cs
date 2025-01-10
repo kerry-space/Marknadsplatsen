@@ -2,6 +2,7 @@ using Marknadsplatsen.Models;
 using Marknadsplatsen.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Marknadsplatsen;
 
 var builder = WebApplication.CreateBuilder(args);
 
