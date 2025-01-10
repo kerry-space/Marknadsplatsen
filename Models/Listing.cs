@@ -27,4 +27,6 @@ public class Listing
     public string? OwnerId { get; set; } // Koppling till AspNetUser
 
     public IdentityUser? Owner { get; set; }
+
+    public string? ImageUrl { get; set; }
 }

@@ -15,13 +15,18 @@
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <h5 class="card-title">@listing.Title</h5>
-                        <p class="card-text">@listing.Description</p>
-                        <p class="card-text"><strong>Price:</strong> @listing.Price SEK</p>
+                        <h5 class="card-title d-flex justify-content-center">@listing.Title</h5>
+                        <p class="card-text d-flex justify-content-center">@listing.Description</p>
+                        <div class="imgClass">
+                            <img class="card-img-top kalle" src="@listing.ImageUrl" alt="Card image cap">
+                        </div>
+                        <p class="card-text d-flex justify-content-center mt-2"><strong>Price:</strong> @listing.Price
+                            SEK
+                        </p>
                         @if (listing.OwnerId == UserManager.GetUserId(User) || isAdmin)
                         {
-                            <div class="d-flex justify-content-between">
-                                <a asp-action="Edit" asp-route-id="@listing.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <div class="d-flex justify-content-center">
+                                <a asp-action="Edit" asp-route-id="@listing.Id" class="btn btn-warning btn-sm me-2">Edit</a>
                                 <a asp-action="Delete" asp-route-id="@listing.Id" class="btn btn-danger btn-sm">Delete</a>
                             </div>
                         }

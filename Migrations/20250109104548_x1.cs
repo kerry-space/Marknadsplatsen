@@ -57,7 +57,8 @@ namespace Marknadsplatsen.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    ImageUrl = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -180,7 +181,8 @@ namespace Marknadsplatsen.Migrations
                     Description = table.Column<string>(type: "text", nullable: false),
                     Price = table.Column<int>(type: "integer", nullable: false),
                     CategoryId = table.Column<int>(type: "integer", nullable: true),
-                    OwnerId = table.Column<string>(type: "text", nullable: false)
+                    OwnerId = table.Column<string>(type: "text", nullable: true),
+                    ImageUrl = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -189,8 +191,7 @@ namespace Marknadsplatsen.Migrations
                         name: "FK_Listings_AspNetUsers_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Listings_Categories_CategoryId",
                         column: x => x.CategoryId,

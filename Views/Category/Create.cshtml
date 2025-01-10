@@ -5,11 +5,18 @@
 <p>Here the admin will create a category</p>
 
 <form asp-action="Create">
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label asp-for="Category.Name" class="control-label"></label>
         <input asp-for="Category.Name" class="form-control" />
         <span asp-validation-for="Category.Name" class="text-danger"></span>
     </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Category.ImageUrl" class="control-label">Image URL:</label>
+        <input asp-for="Category.ImageUrl" class="form-control"/>
+    </div>
+
+
     <div class="form-group mt-3">
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>

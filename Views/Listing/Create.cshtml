@@ -12,6 +12,12 @@
                     <input asp-for="Listing.Title" class="form-control" />
                     <span asp-validation-for="Listing.Title" class="text-danger"></span>
                 </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Listing.ImageUrl" class="control-label">Image URL:</label>
+                    <input asp-for="Listing.ImageUrl" class="form-control" />
+                </div>
+
                 <div class="form-group mb-3">
                     <label asp-for="Listing.Description" class="form-label"></label>
                     <textarea asp-for="Listing.Description" class="form-control"></textarea>

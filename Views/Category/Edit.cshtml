@@ -9,7 +9,11 @@
         <input asp-for="Category.Name" class="form-control" />
         <span asp-validation-for="Category.Name" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn-primary" />
+    <div class="form-group mb-3">
+        <label asp-for="Category.ImageUrl" class="control-label">Image URL:</label>
+        <input asp-for="Category.ImageUrl" class="form-control" />
+    </div>
+    <div class="form-group mb-2">
+        <input type="submit" value="Save" class="btn btn-primary" />
     </div>
 </form>
